@@ -1,15 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-if (module.hot) {
-  module.hot.accept();
-}
+import TestSketch from './test-sketch';
 
-class HellWorld extends React.Component {
+class App extends React.Component {
   render() {
-    return <div>Hell World</div>;
+    return <TestSketch />
   }
 }
 
 const mountNode = document.getElementById("app");
-ReactDOM.render(<HellWorld />, mountNode);
+ReactDOM.render(<App />, mountNode);
