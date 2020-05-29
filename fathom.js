@@ -1,30 +1,22 @@
 import React from 'react';
 
-let NEXT_RENDER_BLOCKED = false;
-
-if (module.hot) {
-  module.hot.dispose(function() {
-    NEXT_RENDER_BLOCKED = true;
-  })
-
-  module.hot.accept(function() {
-    NEXT_RENDER_BLOCKED = false;
-  })
-}
-
-class Fathom extends React.Component {
+class FathomSketch extends React.Component {
   constructor(props) {
     super(props);
     this.canvasRef = React.createRef();
+    this.renderRequestId = undefined;
+    this.startTime = undefined;
   }
 
   componentDidMount() {
-    this.canvas = this.canvasRef.current;
-    this.ctx = this.canvas.getContext('2d');
+    if (this.renderRequestId) window.cancelAnimationFrame(this.renderRequestId);
 
-    this.setup(this.canvas, this.ctx);
+    const canvas = this.canvasRef.current;
+    const ctx = canvas.getContext('2d');
+
+    this.setup(canvas, ctx);
     this.startTime = performance.now();
-    this.drawLoop(this.canvas, this.ctx);
+    this.drawLoop(canvas, ctx);
   }
 
   componentWillUnmount() {
@@ -42,11 +34,10 @@ class Fathom extends React.Component {
   draw(canvas, ctx, timeElapsed) {}
 
   drawLoop(canvas, ctx, timeElapsed = 0) {
-    if (NEXT_RENDER_BLOCKED) return;
+    this.renderRequestId = window.requestAnimationFrame(currentTime => this.drawLoop(canvas, ctx, (currentTime - this.startTime) / 1000));
     this.update(canvas, ctx, timeElapsed);
     this.clear(canvas, ctx);
     this.draw(canvas, ctx, timeElapsed);
-    this.renderRequestId = window.requestAnimationFrame(currentTime => this.drawLoop(canvas, ctx, (currentTime - this.startTime) / 1000));
   }
 
   render() {
@@ -56,4 +47,6 @@ class Fathom extends React.Component {
   }
 }
 
-export default Fathom;
+export default {
+  Sketch: FathomSketch,
+};
