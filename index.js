@@ -1,11 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import TestSketch from './test-sketch';
+import TestGLSketch from './test-gl-sketch/test-gl-sketch';
 
 class App extends React.Component {
   render() {
-    return <TestSketch />
+    return <TestGLSketch />
   }
 }
 
