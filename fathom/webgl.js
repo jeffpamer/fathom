@@ -19,92 +19,114 @@ function loadShader(gl, type, source) {
   return shader;
 }
 
-function initShaderProgram(gl, vert, frag) {
-  const vertexShader = loadShader(gl, gl.VERTEX_SHADER, vert);
-  const fragmentShader = loadShader(gl, gl.FRAGMENT_SHADER, frag);
+function initProgram(gl, vert, frag) {
+  const vertexShader = vert ? loadShader(gl, gl.VERTEX_SHADER, vert) : undefined;
+  const fragmentShader = frag ? loadShader(gl, gl.FRAGMENT_SHADER, frag) : undefined;
 
-  const shaderProgram = gl.createProgram();
-  gl.attachShader(shaderProgram, vertexShader);
-  gl.attachShader(shaderProgram, fragmentShader);
-  gl.linkProgram(shaderProgram);
+  const program = gl.createProgram();
+  if (vertexShader) gl.attachShader(program, vertexShader);
+  if (fragmentShader) gl.attachShader(program, fragmentShader);
+  gl.linkProgram(program);
 
-  if (!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS)) {
-    console.error('Unable to initialize shader program', gl.getProgramInfoLog(shaderProgram));
+  if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+    console.error('Unable to initialize shader program', gl.getProgramInfoLog(program));
     return null;
   }
 
-  gl.useProgram(shaderProgram);
-  return shaderProgram;
+  return program;
+}
+
+function initVertexBuffer(gl, program) {
+  // const texCoordsLoc = gl.getAttribLocation(program, 'a_texcoord');
+  // const texCoordsBuffer = gl.createBuffer();
+  // gl.bindBuffer(gl.ARRAY_BUFFER, texCoordsBuffer);
+  // gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0]), gl.STATIC_DRAW);
+  // gl.enableVertexAttribArray(texCoordsLoc);
+  // gl.vertexAttribPointer(texCoordsLoc, 2, gl.FLOAT, false, 0, 0);
+
+  const verticesLoc = gl.getAttribLocation(program, 'a_position');
+  const verticesBuffer = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, verticesBuffer);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1.0, -1.0, 1.0, -1.0, -1.0, 1.0, -1.0, 1.0, 1.0, -1.0, 1.0, 1.0]), gl.STATIC_DRAW);
+  gl.enableVertexAttribArray(verticesLoc);
+  gl.vertexAttribPointer(verticesLoc, 2, gl.FLOAT, false, 0, 0);
 }
 
 class WebGLSketch extends React.Component {
   vert = glsl`
+    #ifdef GL_ES
+    precision mediump float;
+    #endif
+
+    attribute vec2 a_texcoord;
     attribute vec2 a_position;
+
+    varying vec2 v_texcoord;
+
     void main() {
-      gl_Position = vec4(a_position, 0, 1);
+      gl_Position = vec4(a_position, 0.0, 1.0);
+      v_texcoord = a_texcoord;
+    }
+  `;
+
+  frag = glsl`
+    #ifdef GL_ES
+    precision mediump float;
+    #endif
+
+    void main() {
+      gl_FragColor = vec4(0.0);
     }
   `;
   
-  frag = glsl``;
-
   constructor(props) {
     super(props);
     this.canvasRef = React.createRef();
-    this.renderRequestId = undefined;
+    this.animationFrameRequest = undefined;
     this.startTime = undefined;
+    this.animationFrameRequest = undefined;
   }
 
   componentDidMount() {
-    const canvas = this.canvasRef.current;
-    const gl = canvas.getContext('webgl');
-
-    this.setup(gl);
-    this.shaderProgram = initShaderProgram(gl, this.vert, this.frag);
-
-    const buffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-    gl.bufferData(
-      gl.ARRAY_BUFFER, 
-      new Float32Array([
-        -1.0, -1.0, 
-         1.0, -1.0, 
-        -1.0,  1.0, 
-        -1.0,  1.0, 
-         1.0, -1.0, 
-         1.0,  1.0]), 
-      gl.STATIC_DRAW
-    );
-
-    this.clear(gl);
-    this.draw(gl, this.shaderProgram);
+    this.setup();
+    this.startTime = performance.now();
+    this.animationFrameRequest = window.requestAnimationFrame(() => this.drawLoop());
   }
 
   componentWillUnmount() {
-    window.cancelAnimationFrame(this.renderRequestId);
+    window.cancelAnimationFrame(this.animationFrameRequest);
   }
 
-  setup(gl) {}
-
-  update(gl, shaderProgram, timeElapsed) {}
-
-  clear(gl) {
-    // Set clear color to black, fully opaque
-    gl.clearColor(0.0, 0.0, 0.0, 1.0);
-    // Clear the color buffer with specified clear color
-    gl.clear(gl.COLOR_BUFFER_BIT);
+  setup() {
+    this.canvas = this.canvasRef.current;
+    this.gl = this.canvas.getContext('webgl');
+    this.program = initProgram(this.gl, this.vert, this.frag);
+    this.gl.useProgram(this.program);
+    this.buffer = initVertexBuffer(this.gl, this.program);
   }
 
-  draw(gl, shaderProgram, timeElapsed) {
-    const positionLocation = gl.getAttribLocation(shaderProgram, 'a_position');
-    gl.enableVertexAttribArray(positionLocation);
-    gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
-    gl.drawArrays(gl.TRIANGLES, 0, 6);
+  setUniform(method, name, ...value) {
+    const uniformLocation = this.gl.getUniformLocation(this.program, name);
+    this.gl['uniform' + method].apply(this.gl, [uniformLocation].concat(value));
   }
 
-  drawLoop(gl, shaderProgram, timeElapsed = 0) {
-    this.update(gl, shaderProgram, timeElapsed);
-    this.clear(gl);
-    this.draw(gl, shaderProgram, timeElapsed);
+  update(timeElapsed) {
+    // set the resolution uniform
+    this.setUniform('2f', 'u_resolution', this.canvas.width, this.canvas.height);
+
+    // set the time elapsed
+    this.setUniform('1f', 'u_time', timeElapsed);
+  }
+
+  draw(timeElapsed) {
+    this.gl.drawArrays(this.gl.TRIANGLES, 0, 6);
+  }
+
+  drawLoop(renderTime = 0) {
+    this.animationFrameRequest = window.requestAnimationFrame((t) => this.drawLoop(t));
+    const timeElapsed = Math.max((renderTime - this.startTime) / 1000, 0);
+    this.update(timeElapsed);
+    this.draw(timeElapsed);
   }
 
   render() {
