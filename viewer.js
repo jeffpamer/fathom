@@ -1,17 +1,12 @@
 import React from 'react';
 
-// Identity function for glsl tagged templates (i.e. just pass-through to allow for syntax highlighting, not other processing);
-const glsl = x => x;
-const frag = x => x;
-const vert = x => x;
-
 function loadShader(gl, type, source) {
   const shader = gl.createShader(type);
   gl.shaderSource(shader, source);
   gl.compileShader(shader);
 
   if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-    console.error('An error occurred compiling the shader', gl.getShaderInfoLog(shader));
+    console.error(gl.getShaderInfoLog(shader));
     gl.deleteShader(shader);
     return null;
   }
@@ -29,7 +24,7 @@ function initProgram(gl, vert, frag) {
   gl.linkProgram(program);
 
   if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
-    console.error('Unable to initialize shader program', gl.getProgramInfoLog(program));
+    // console.error('Unable to initialize shader program', gl.getProgramInfoLog(program));
     return null;
   }
 
@@ -52,8 +47,8 @@ function initVertexBuffer(gl, program) {
   gl.vertexAttribPointer(verticesLoc, 2, gl.FLOAT, false, 0, 0);
 }
 
-class WebGLSketch extends React.Component {
-  vert = glsl`
+class InspectralViewer extends React.PureComponent {
+  vert = `
     #ifdef GL_ES
     precision mediump float;
     #endif
@@ -69,13 +64,13 @@ class WebGLSketch extends React.Component {
     }
   `;
 
-  frag = glsl`
+  frag = `
     #ifdef GL_ES
     precision mediump float;
     #endif
 
     void main() {
-      gl_FragColor = vec4(0.0);
+      gl_FragColor = vec4(1.0);
     }
   `;
   
@@ -102,10 +97,23 @@ class WebGLSketch extends React.Component {
     this.canvas.removeEventListener('mousemove', this.onMouseMove);
   }
 
+  componentDidUpdate() {
+    window.cancelAnimationFrame(this.animationFrameRequest);
+    const { frag } = this.props;
+    this.program = initProgram(this.gl, this.vert, frag);
+
+    if (this.program) {
+      this.gl.useProgram(this.program);
+      this.animationFrameRequest = window.requestAnimationFrame(() => this.drawLoop());
+    }
+  }
+
   setup() {
+    const { frag } = this.props;
+
     this.canvas = this.canvasRef.current;
     this.gl = this.canvas.getContext('webgl');
-    this.program = initProgram(this.gl, this.vert, this.frag);
+    this.program = initProgram(this.gl, this.vert, frag);
     this.gl.useProgram(this.program);
     this.buffer = initVertexBuffer(this.gl, this.program);
 
@@ -131,7 +139,6 @@ class WebGLSketch extends React.Component {
 
     // set the time elapsed
     this.setUniform('1f', 'u_time', timeElapsed);
-
   }
 
   draw(timeElapsed) {
@@ -147,10 +154,9 @@ class WebGLSketch extends React.Component {
 
   render() {
     return (
-      <canvas ref={this.canvasRef} width="640" height="640" />
+      <canvas className="inspectral-viewer" ref={this.canvasRef} width="100%" height="100%" />
     )
   }
 }
 
-export default WebGLSketch
-export { glsl, frag, vert }
+export default InspectralViewer

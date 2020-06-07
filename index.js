@@ -1,13 +1,19 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import TestGLSketch from './test-gl-sketch/test-gl-sketch';
+import './index.css';
 
-class App extends React.Component {
+import InspectralEditor from './editor';
+
+class Inspectral extends React.Component {
   render() {
-    return <TestGLSketch />
+    return (
+      <div className="inspectral-container">
+        <InspectralEditor />
+      </div>
+    );
   }
 }
 
 const mountNode = document.getElementById("app");
-ReactDOM.render(<App />, mountNode);
+ReactDOM.render(<Inspectral />, mountNode);

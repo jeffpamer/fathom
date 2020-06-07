@@ -1665,6 +1665,11 @@
     chrome-trace-event "^1.0.2"
     nullthrows "^1.1.1"
 
+"@types/ace@^0.0.43":
+  version "0.0.43"
+  resolved "https://registry.yarnpkg.com/@types/ace/-/ace-0.0.43.tgz#9f0916174b6060dabbccd36ba4868ea769a1c633"
+  integrity sha512-eQdX8AQ7CfSHym07MZMBQ8FKUj9AZ2Wcc26W5Ct8J4KOMjFY6SFUaf2YA8YHBut0Fwl//2kZ+0GLZNp+NQNRIA==
+
 "@types/color-name@^1.1.1":
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/@types/color-name/-/color-name-1.1.1.tgz#1c1261bbeaa10a8055bbc5d8ab84b7b2afc846a0"
@@ -1684,6 +1689,11 @@ abortcontroller-polyfill@^1.1.9:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/abortcontroller-polyfill/-/abortcontroller-polyfill-1.4.0.tgz#0d5eb58e522a461774af8086414f68e1dda7a6c4"
   integrity sha512-3ZFfCRfDzx3GFjO6RAkYx81lPGpUS20ISxux9gLxuKnqafNcFQo59+IoZqpO2WvQlyc287B62HDnDdNYRmlvWA==
+
+ace-builds@^1.4.11:
+  version "1.4.11"
+  resolved "https://registry.yarnpkg.com/ace-builds/-/ace-builds-1.4.11.tgz#b1f19a891afcef1d26522473082baf80067e855f"
+  integrity sha512-keACH1d7MvAh72fE/us36WQzOFQPJbHphNpj33pXwVZOM84pTWcdFzIAvngxOGIGLTm7gtUP2eJ4Ku6VaPo8bw==
 
 acorn-globals@^4.3.0:
   version "4.3.4"
@@ -4019,6 +4029,11 @@ lodash.clone@^4.5.0:
   version "4.5.0"
   resolved "https://registry.yarnpkg.com/lodash.clone/-/lodash.clone-4.5.0.tgz#195870450f5a13192478df4bc3d23d2dea1907b6"
   integrity sha1-GVhwRQ9aExkkeN9Lw9I9LeoZB7Y=
+
+lodash.debounce@^4.0.8:
+  version "4.0.8"
+  resolved "https://registry.yarnpkg.com/lodash.debounce/-/lodash.debounce-4.0.8.tgz#82d79bff30a67c4005ffd5e2515300ad9ca4d7af"
+  integrity sha1-gteb/zCmfEAF/9XiUVMArZyk168=
 
 lodash.memoize@^4.1.2:
   version "4.1.2"

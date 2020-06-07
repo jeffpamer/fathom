@@ -1,0 +1,29 @@
+html, body {
+  padding: 0;
+  margin: 0;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.inspectral-editor-container {
+  width: 100vw;
+  height: 100vh;
+}
+
+.inspectral-editor {
+  position: absolute;
+  top: -12px;
+  left: 0;
+  width: 50%;
+  height: 100%;
+}
+
+.inspectral-viewer {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 50%;
+  height: 100%;
+}
