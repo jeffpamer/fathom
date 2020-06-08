@@ -3,8 +3,8 @@ import debounce from 'lodash.debounce';
 import ace from 'ace-builds/src-noconflict/ace';
 import vim from 'ace-builds/src-noconflict/keybinding-vim';
 import glsl from 'ace-builds/src-noconflict/mode-glsl';
-import languageTools from 'ace-builds/src-noconflict/ext-language_tools';
 
+import './spectral-glow';
 import InspectralViewer from './viewer';
 
 const DEFAULT_FRAG =
@@ -33,10 +33,18 @@ class InspectralEditor extends React.Component {
     const editor = ace.edit('editor');
     editor.setKeyboardHandler(vim.handler);
 
+    editor.setTheme('ace/theme/spectral_glow');
+
     editor.session.setOptions({
       mode: new glsl.Mode(),
       tabSize: 2,
       useSoftTabs: true,
+    });
+
+    editor.renderer.setOptions({
+      showGutter: false,
+      fontSize: 14,
+      fontFamily: 'IBM Plex Mono',
     });
 
     // EVENT LISTENERS

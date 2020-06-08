@@ -1,0 +1,113 @@
+:root {
+  --gray10: #151719;
+  --gray20: #252729;
+  --gray30: #353739;
+  --gray70: #717375;
+  --gray80: #939597;
+  --gray90: #c5c7c9;
+  --accent: #e2fd3b;
+}
+
+.ace-spectral-glow .ace_gutter {
+  background: var(--gray-10);
+  color: #d0edf7
+}
+
+.ace-spectral-glow .ace_print-margin {
+  width: 1px;
+  background: var(--gray10);
+}
+
+.ace-spectral-glow {
+  background-color: var(--gray-10);
+  color: var(--gray90);
+}
+
+.ace-spectral-glow .ace_entity.ace_other.ace_attribute-name,
+.ace-spectral-glow .ace_storage {
+  color: var(--gray80);
+}
+
+.normal-mode .ace_cursor {
+  background-color: var(--accent);
+  opacity: 0.7;
+}
+
+.ace_cursor {
+  border-color: var(--accent);
+}
+
+.ace-spectral-glow .ace_punctuation,
+.ace-spectral-glow .ace_operator {
+  color: var(--gray80);
+}
+
+.ace-spectral-glow .ace_paren {
+  color: var(--accent);
+}
+
+.normal-mode .ace_hidden-cursors .ace_cursor {
+  border: 1px solid var(--accent);
+}
+
+.ace-spectral-glow .ace_marker-layer .ace_active-line {
+  background: var(--gray20);
+}
+
+.ace-spectral-glow .ace_marker-layer .ace_selection {
+  background: var(--gray30);
+}
+
+.ace-spectral-glow .ace_marker-layer .ace_bracket {
+  border: 1px solid var(--accent);
+  border-radius: 0;
+  opacity: 0.7;
+}
+
+.ace-spectral-glow .ace_keyword,
+.ace-spectral-glow .ace_meta,
+.ace-spectral-glow .ace_support.ace_class,
+.ace-spectral-glow .ace_support.ace_type {
+  color: var(--gray80);
+}
+
+.ace-spectral-glow .ace_constant.ace_language {
+  color: var(--gray70);
+}
+
+.ace-spectral-glow .ace_constant.ace_numeric {
+  color: var(--gray90);
+}
+
+.ace-spectral-glow .ace_entity.ace_name.ace_function,
+.ace-spectral-glow .ace_entity.ace_name.ace_tag,
+.ace-spectral-glow .ace_support.ace_function,
+.ace-spectral-glow .ace_variable,
+.ace-spectral-glow .ace_variable.ace_language {
+  color: var(--gray80);
+}
+
+.ace-spectral-glow .ace_string {
+  color: var(--gray70);
+}
+
+.ace-spectral-glow .ace_comment {
+  font-style: italic;
+  color: var(--gray70);
+}
+
+.ace-spectral-glow .ace_indent-guide {
+  background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAACCAYAAACZgbYnAAAAEklEQVQImWNg0Db1ZVCxc/sPAAd4AlUHlLenAAAAAElFTkSuQmCC) right repeat-y
+}
+
+::-webkit-scrollbar {
+  background-color: transparent;
+}
+
+::-webkit-scrollbar-track {
+  background-color: var(--gray20);
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--gray30);
+}
