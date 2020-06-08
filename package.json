@@ -2,9 +2,10 @@
   "name": "fathom",
   "version": "1.0.0",
   "description": "Interfaces for creating audio/visual sketches",
-  "main": "index.js",
+  "main": "electron.js",
   "scripts": {
-    "start": "parcel index.html"
+    "start": "parcel index.html",
+    "start-electron": "electron ."
   },
   "author": "",
   "license": "ISC",
@@ -18,6 +19,7 @@
   },
   "devDependencies": {
     "@types/ace": "^0.0.43",
+    "electron": "^9.0.2",
     "parcel": "^2.0.0-alpha.3.2"
   }
 }
