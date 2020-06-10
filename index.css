@@ -1,42 +1,73 @@
 @import './spectral-glow.css';
 
-html, body {
+* {
+  box-sizing: border-box;
   padding: 0;
   margin: 0;
+}
+
+body {
   background-color: var(--gray10);
 }
 
-* {
-  box-sizing: border-box;
-}
-
-pre {
-  margin: 0;
-}
-
-.inspectral-container {
-  position: relative;
-  width: calc(100vw - 100px);
-  height: calc(100vh - 100px);
-  margin: 50px;
-}
-
-.inspectral-editor-container {
-  width: 100%;
-  height: 100%;
-}
-
-.inspectral-editor {
-  position: absolute;
-  left: 0;
-  width: calc(50% - 25px);
-  height: 100%;
-}
-
-.inspectral-viewer {
+.header {
   position: absolute;
   top: 0;
-  left: calc(50% + 25px);
-  width: calc(50% - 25px);
+  left: 0;
+  width: 100%;
+  height: 50px;
+  -webkit-app-region: drag
+}
+
+.fathom-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr;
+  grid-gap: 50px;
+  width: 100vw;
+  height: 100vh;
+  padding: 50px;
+}
+
+.fathom-editor-container {
+  position: relative;
+}
+
+.fathom-editor {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.fathom-viewer-container {
+  position: relative;
+}
+
+.fathom-viewer-inner-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  max-width: calc(100vh - 100px);
+  transform: translate(-50%, -50%);
+}
+
+.fathom-viewer {
+  position: relative;
+  top: 0;
+  left: 0;
+  width: 100%;
   height: 100%;
+  padding-bottom: 100%;
+}
+
+.fathom-viewer-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 100%;
 }

@@ -1,25 +1,23 @@
 :root {
   --gray10: #151719;
-  --gray20: #252729;
+  --gray20: #232527;
   --gray30: #353739;
-  --gray70: #717375;
-  --gray80: #939597;
-  --gray90: #c5c7c9;
+  --gray70: #737577;
+  --gray80: #959799;
+  --gray90: #c0c3c5;
   --accent: #e2fd3b;
 }
 
 .ace-spectral-glow .ace_gutter {
-  background: var(--gray-10);
-  color: #d0edf7
+  display: none;
 }
 
 .ace-spectral-glow .ace_print-margin {
-  width: 1px;
-  background: var(--gray10);
+  display: none;
 }
 
 .ace-spectral-glow {
-  background-color: var(--gray-10);
+  background-color: var(--gray10);
   color: var(--gray90);
 }
 
@@ -30,7 +28,6 @@
 
 .normal-mode .ace_cursor {
   background-color: var(--accent);
-  opacity: 0.7;
 }
 
 .ace_cursor {
@@ -96,10 +93,6 @@
   color: var(--gray70);
 }
 
-.ace-spectral-glow .ace_indent-guide {
-  background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAACCAYAAACZgbYnAAAAEklEQVQImWNg0Db1ZVCxc/sPAAd4AlUHlLenAAAAAElFTkSuQmCC) right repeat-y
-}
-
 ::-webkit-scrollbar {
   background-color: transparent;
 }
@@ -110,4 +103,8 @@
 
 ::-webkit-scrollbar-thumb {
   background-color: var(--gray30);
+}
+
+::-webkit-scrollbar-corner {
+  display: none;
 }

@@ -47,7 +47,7 @@ function initVertexBuffer(gl, program) {
   gl.vertexAttribPointer(verticesLoc, 2, gl.FLOAT, false, 0, 0);
 }
 
-class InspectralViewer extends React.PureComponent {
+class FathomViewer extends React.PureComponent {
   vert = `
     #ifdef GL_ES
     precision mediump float;
@@ -154,9 +154,15 @@ class InspectralViewer extends React.PureComponent {
 
   render() {
     return (
-      <canvas className="inspectral-viewer" ref={this.canvasRef} width="100%" height="100%" />
+      <div className="fathom-viewer-container">
+        <div className="fathom-viewer-inner-container">
+          <div className="fathom-viewer">
+            <canvas className="fathom-viewer-canvas" ref={this.canvasRef} width="100%" height="100%" />
+          </div>
+        </div>
+      </div>
     )
   }
 }
 
-export default InspectralViewer
+export default FathomViewer

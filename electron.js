@@ -13,6 +13,7 @@ function createWindow() {
     width: 1280,
     height: 690,
     backgroundColor: '#151719',
+    frame: false,
   });
 
   mainWindow.loadURL(
