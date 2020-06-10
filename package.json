@@ -1,11 +1,21 @@
 {
   "name": "fathom",
   "version": "1.0.0",
+  "build": {
+    "appId": "com.mediumdivision.fathom",
+    "directories": {
+      "output": "dist_electron"
+    },
+    "files": [
+      "./electron.js", "./dist/**/*"
+    ]
+  },
   "description": "Interfaces for creating audio/visual sketches",
-  "main": "electron.js",
   "scripts": {
-    "start": "parcel index.html",
-    "start-electron": "electron ."
+    "start": "parcel serve index.html",
+    "build": "parcel build index.html",
+    "electron": "electron electron.js",
+    "build-electron": "electron-builder"
   },
   "author": "",
   "license": "ISC",
@@ -20,6 +30,7 @@
   "devDependencies": {
     "@types/ace": "^0.0.43",
     "electron": "^9.0.2",
+    "electron-builder": "^22.7.0",
     "parcel": "^2.0.0-alpha.3.2"
   }
 }

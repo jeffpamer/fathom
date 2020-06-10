@@ -10,14 +10,15 @@ let mainWindow;
 
 function createWindow() {
   mainWindow = new BrowserWindow({
-    width: 900,
-    height: 680
+    width: 1280,
+    height: 690,
+    backgroundColor: '#151719',
   });
 
   mainWindow.loadURL(
     isDev
       ? 'http://localhost:1234'
-      : `file://${path.join(__dirname, '../build/index.html')}`
+      : `file://${path.join(__dirname, 'dist/index.html')}`
   );
   mainWindow.on('closed', () => (mainWindow = null));
 }
