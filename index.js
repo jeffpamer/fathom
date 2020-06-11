@@ -6,6 +6,7 @@ import './index.css';
 
 import FathomEditor from './editor';
 import FathomViewer from './viewer';
+import ControlPanel from './controlPanel';
 
 const DEFAULT_FRAG =
 `#ifdef GL_ES
@@ -26,8 +27,13 @@ void main() {
 class Fathom extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { frag: DEFAULT_FRAG };
+    this.state = { frag: DEFAULT_FRAG, circular: true };
     this.onUpdateFrag = this.onUpdateFrag.bind(this);
+    this.onToggleCircular = this.onToggleCircular.bind(this);
+  }
+
+  onToggleCircular() {
+    this.setState({ circular: !this.state.circular });
   }
 
   onUpdateFrag(frag) {
@@ -35,13 +41,14 @@ class Fathom extends React.Component {
   }
 
   render() {
-    const { frag } = this.state;
+    const { frag, circular } = this.state;
 
     return (
       <div className="fathom-container">
         <div className="header" />
         <FathomEditor frag={frag} updateFrag={this.onUpdateFrag} />
-        <FathomViewer frag={frag} />
+        <FathomViewer frag={frag} circular={circular} />
+        <ControlPanel toggleCircular={this.onToggleCircular} />
       </div>
     );
   }

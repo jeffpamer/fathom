@@ -153,11 +153,14 @@ class FathomViewer extends React.PureComponent {
   }
 
   render() {
+    const { circular } = this.props;
+    const canvasStyle = { borderRadius: circular ? '100%' : 0 };
+
     return (
       <div className="fathom-viewer-container">
         <div className="fathom-viewer-inner-container">
           <div className="fathom-viewer">
-            <canvas className="fathom-viewer-canvas" ref={this.canvasRef} width="100%" height="100%" />
+            <canvas className="fathom-viewer-canvas" ref={this.canvasRef} width="100%" height="100%" style={canvasStyle} />
           </div>
         </div>
       </div>
