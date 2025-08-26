@@ -39,7 +39,7 @@ function Fathom() {
   return (
     <div className="fathom-container">
       <div className="header" />
-      <FathomEditor frag={frag} updateFrag={onUpdateFrag} />
+      <FathomEditor defaultFrag={DEFAULT_FRAG} updateFrag={onUpdateFrag} />
       <FathomViewer frag={frag} circular={circular} />
       <ControlPanel toggleCircular={onToggleCircular} />
     </div>
