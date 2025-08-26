@@ -7,7 +7,8 @@
       "output": "dist_electron"
     },
     "files": [
-      "./electron.js", "./dist/**/*"
+      "./electron.js",
+      "./dist/**/*"
     ]
   },
   "description": "Interfaces for creating audio/visual sketches",
@@ -20,17 +21,18 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@ibm/plex": "^4.0.2",
+    "@ibm/plex": "^6.4.1",
     "ace-builds": "^1.4.11",
     "electron-is-dev": "^1.2.0",
     "lodash.debounce": "^4.0.8",
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1"
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
   },
   "devDependencies": {
+    "@parcel/transformer-sass": "2.15.4",
     "@types/ace": "^0.0.43",
-    "electron": "^9.0.2",
+    "electron": "^11.0.1",
     "electron-builder": "^22.7.0",
-    "parcel": "^2.0.0-alpha.3.2"
+    "parcel": "^2.15.4"
   }
 }
