@@ -1,15 +1,15 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React from "react";
+import { useState } from "react";
+import { createRoot } from "react-dom/client";
 
-import '@ibm/plex/scss/ibm-plex.scss'
-import './index.css';
+import "@ibm/plex/scss/ibm-plex.scss";
+import "./index.css";
 
-import FathomEditor from './editor';
-import FathomViewer from './viewer';
-import ControlPanel from './controlPanel';
+import FathomEditor from "./editor";
+import FathomViewer from "./viewer";
+import ControlPanel from "./controlPanel";
 
-const DEFAULT_FRAG =
-`#ifdef GL_ES
+const DEFAULT_FRAG = `#ifdef GL_ES
 precision mediump float;
 #endif
 
@@ -24,35 +24,55 @@ void main() {
     st.y * abs(sin(u_time * 0.33)), 1.0);
 }`;
 
-class Fathom extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { frag: DEFAULT_FRAG, circular: true };
-    this.onUpdateFrag = this.onUpdateFrag.bind(this);
-    this.onToggleCircular = this.onToggleCircular.bind(this);
+function Fathom() {
+  const [frag, setFrag] = useState(DEFAULT_FRAG);
+  const [circular, setCircular] = useState(true);
+  const [shaderErrors, setShaderErrors] = useState([]);
+
+  function onToggleCircular() {
+    setCircular(!circular);
   }
 
-  onToggleCircular() {
-    this.setState({ circular: !this.state.circular });
+  function onUpdateFrag(frag) {
+    setFrag(frag);
   }
 
-  onUpdateFrag(frag) {
-    this.setState({ frag });
+  function onShaderError(errors) {
+    const formattedErrors = errors.map((error) => {
+      const errorComponents = error.split(":");
+      const errorLine = errorComponents[2];
+      const errorSymbol = errorComponents[3];
+      const errorMessage = errorComponents[4];
+      if (!errorMessage) return {};
+      return {
+        row: errorLine - 1,
+        column: 0,
+        text: `${errorSymbol.trim()}: ${errorMessage.trim()}`,
+        type: "error",
+      };
+    });
+
+    setShaderErrors(formattedErrors);
   }
 
-  render() {
-    const { frag, circular } = this.state;
-
-    return (
-      <div className="fathom-container">
-        <div className="header" />
-        <FathomEditor frag={frag} updateFrag={this.onUpdateFrag} />
-        <FathomViewer frag={frag} circular={circular} />
-        <ControlPanel toggleCircular={this.onToggleCircular} />
-      </div>
-    );
-  }
+  return (
+    <div className="fathom-container">
+      <div className="header" />
+      <FathomEditor
+        defaultFrag={DEFAULT_FRAG}
+        updateFrag={onUpdateFrag}
+        shaderErrors={shaderErrors}
+      />
+      <FathomViewer
+        frag={frag}
+        circular={circular}
+        onShaderError={onShaderError}
+      />
+      <ControlPanel toggleCircular={onToggleCircular} />
+    </div>
+  );
 }
 
 const mountNode = document.getElementById("app");
-ReactDOM.render(<Fathom />, mountNode);
+const root = createRoot(mountNode);
+root.render(<Fathom />);

@@ -1,4 +1,6 @@
-import React from 'react';
+import React from "react";
+
+function reportShaderError() {}
 
 function loadShader(gl, type, source) {
   const shader = gl.createShader(type);
@@ -6,17 +8,24 @@ function loadShader(gl, type, source) {
   gl.compileShader(shader);
 
   if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-    console.error(gl.getShaderInfoLog(shader));
+    const errors = gl.getShaderInfoLog(shader).split("\n");
+    reportShaderError(errors);
     gl.deleteShader(shader);
     return null;
+  } else {
+    reportShaderError([]);
   }
 
   return shader;
 }
 
 function initProgram(gl, vert, frag) {
-  const vertexShader = vert ? loadShader(gl, gl.VERTEX_SHADER, vert) : undefined;
-  const fragmentShader = frag ? loadShader(gl, gl.FRAGMENT_SHADER, frag) : undefined;
+  const vertexShader = vert
+    ? loadShader(gl, gl.VERTEX_SHADER, vert)
+    : undefined;
+  const fragmentShader = frag
+    ? loadShader(gl, gl.FRAGMENT_SHADER, frag)
+    : undefined;
 
   const program = gl.createProgram();
   if (vertexShader) gl.attachShader(program, vertexShader);
@@ -32,17 +41,16 @@ function initProgram(gl, vert, frag) {
 }
 
 function initVertexBuffer(gl, program) {
-  // const texCoordsLoc = gl.getAttribLocation(program, 'a_texcoord');
-  // const texCoordsBuffer = gl.createBuffer();
-  // gl.bindBuffer(gl.ARRAY_BUFFER, texCoordsBuffer);
-  // gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0]), gl.STATIC_DRAW);
-  // gl.enableVertexAttribArray(texCoordsLoc);
-  // gl.vertexAttribPointer(texCoordsLoc, 2, gl.FLOAT, false, 0, 0);
-
-  const verticesLoc = gl.getAttribLocation(program, 'a_position');
+  const verticesLoc = gl.getAttribLocation(program, "a_position");
   const verticesBuffer = gl.createBuffer();
   gl.bindBuffer(gl.ARRAY_BUFFER, verticesBuffer);
-  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1.0, -1.0, 1.0, -1.0, -1.0, 1.0, -1.0, 1.0, 1.0, -1.0, 1.0, 1.0]), gl.STATIC_DRAW);
+  gl.bufferData(
+    gl.ARRAY_BUFFER,
+    new Float32Array([
+      -1.0, -1.0, 1.0, -1.0, -1.0, 1.0, -1.0, 1.0, 1.0, -1.0, 1.0, 1.0,
+    ]),
+    gl.STATIC_DRAW,
+  );
   gl.enableVertexAttribArray(verticesLoc);
   gl.vertexAttribPointer(verticesLoc, 2, gl.FLOAT, false, 0, 0);
 }
@@ -73,7 +81,7 @@ class FathomViewer extends React.PureComponent {
       gl_FragColor = vec4(1.0);
     }
   `;
-  
+
   constructor(props) {
     super(props);
     this.canvasRef = React.createRef();
@@ -89,22 +97,29 @@ class FathomViewer extends React.PureComponent {
   componentDidMount() {
     this.setup();
     this.startTime = performance.now();
-    this.animationFrameRequest = window.requestAnimationFrame(() => this.drawLoop());
+    this.animationFrameRequest = window.requestAnimationFrame(() =>
+      this.drawLoop(),
+    );
   }
 
   componentWillUnmount() {
     window.cancelAnimationFrame(this.animationFrameRequest);
-    this.canvas.removeEventListener('mousemove', this.onMouseMove);
+    this.canvas.removeEventListener("mousemove", this.onMouseMove);
   }
 
-  componentDidUpdate() {
+  componentDidUpdate({ frag: previousFrag }) {
     window.cancelAnimationFrame(this.animationFrameRequest);
     const { frag } = this.props;
-    this.program = initProgram(this.gl, this.vert, frag);
+
+    if (previousFrag !== frag) {
+      this.program = initProgram(this.gl, this.vert, frag);
+    }
 
     if (this.program) {
       this.gl.useProgram(this.program);
-      this.animationFrameRequest = window.requestAnimationFrame(() => this.drawLoop());
+      this.animationFrameRequest = window.requestAnimationFrame(() =>
+        this.drawLoop(),
+      );
     }
   }
 
@@ -112,12 +127,12 @@ class FathomViewer extends React.PureComponent {
     const { frag } = this.props;
 
     this.canvas = this.canvasRef.current;
-    this.gl = this.canvas.getContext('webgl');
+    this.gl = this.canvas.getContext("webgl");
     this.program = initProgram(this.gl, this.vert, frag);
     this.gl.useProgram(this.program);
     this.buffer = initVertexBuffer(this.gl, this.program);
 
-    this.canvas.addEventListener('mousemove', this.onMouseMove);
+    this.canvas.addEventListener("mousemove", this.onMouseMove);
   }
 
   onMouseMove(e) {
@@ -127,18 +142,23 @@ class FathomViewer extends React.PureComponent {
 
   setUniform(method, name, ...value) {
     const uniformLocation = this.gl.getUniformLocation(this.program, name);
-    this.gl['uniform' + method].apply(this.gl, [uniformLocation].concat(value));
+    this.gl["uniform" + method].apply(this.gl, [uniformLocation].concat(value));
   }
 
   update(timeElapsed) {
     // set the resolution uniform
-    this.setUniform('2f', 'u_resolution', this.canvas.width, this.canvas.height);
+    this.setUniform(
+      "2f",
+      "u_resolution",
+      this.canvas.width,
+      this.canvas.height,
+    );
 
     // set the mouse position
-    this.setUniform('2f', 'u_mouse', this.mouseX, this.mouseY);
+    this.setUniform("2f", "u_mouse", this.mouseX, this.mouseY);
 
     // set the time elapsed
-    this.setUniform('1f', 'u_time', timeElapsed);
+    this.setUniform("1f", "u_time", timeElapsed);
   }
 
   draw(timeElapsed) {
@@ -146,26 +166,35 @@ class FathomViewer extends React.PureComponent {
   }
 
   drawLoop(renderTime = 0) {
-    this.animationFrameRequest = window.requestAnimationFrame((t) => this.drawLoop(t));
+    this.animationFrameRequest = window.requestAnimationFrame((t) =>
+      this.drawLoop(t),
+    );
     const timeElapsed = Math.max((renderTime - this.startTime) / 1000, 0);
     this.update(timeElapsed);
     this.draw(timeElapsed);
   }
 
   render() {
-    const { circular } = this.props;
-    const canvasStyle = { borderRadius: circular ? '100%' : 0 };
+    const { circular, onShaderError } = this.props;
+    const canvasStyle = { borderRadius: circular ? "100%" : 0 };
+    reportShaderError = onShaderError;
 
     return (
       <div className="fathom-viewer-container">
         <div className="fathom-viewer-inner-container">
           <div className="fathom-viewer">
-            <canvas className="fathom-viewer-canvas" ref={this.canvasRef} width="100%" height="100%" style={canvasStyle} />
+            <canvas
+              className="fathom-viewer-canvas"
+              ref={this.canvasRef}
+              width="100%"
+              height="100%"
+              style={canvasStyle}
+            />
           </div>
         </div>
       </div>
-    )
+    );
   }
 }
 
-export default FathomViewer
+export default FathomViewer;
