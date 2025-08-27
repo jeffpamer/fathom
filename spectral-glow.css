@@ -1,79 +1,73 @@
 :root {
-  --gray10: #151719;
-  --gray20: #232527;
-  --gray30: #353739;
-  --gray70: #737577;
-  --gray80: #959799;
-  --gray90: #c0c3c5;
-  --accent: #e2fd3b;
-}
-
-.ace-spectral-glow .ace_gutter {
-  display: none;
-}
-
-.ace-spectral-glow .ace_print-margin {
-  display: none;
+    --gray10: #151719;
+    --gray20: #232527;
+    --gray30: #353739;
+    --gray70: #737577;
+    --gray80: #959799;
+    --gray90: #c0c3c5;
+    --accent: #e2fd3b;
+    --error: #e71d36;
 }
 
 .ace-spectral-glow {
-  background-color: var(--gray10);
-  color: var(--gray90);
+    background-color: var(--gray10);
+    color: var(--gray90);
+    margin-left: -18px;
 }
 
 .ace-spectral-glow .ace_entity.ace_other.ace_attribute-name,
 .ace-spectral-glow .ace_storage {
-  color: var(--gray80);
+    color: var(--gray80);
 }
 
 .normal-mode .ace_cursor {
-  background-color: var(--accent);
+    background-color: var(--accent);
 }
 
 .ace_cursor {
-  border-color: var(--accent);
+    border-color: var(--accent);
 }
 
 .ace-spectral-glow .ace_punctuation,
 .ace-spectral-glow .ace_operator {
-  color: var(--gray80);
+    color: var(--gray80);
 }
 
 .ace-spectral-glow .ace_paren {
-  color: var(--accent);
+    color: var(--accent);
 }
 
 .normal-mode .ace_hidden-cursors .ace_cursor {
-  border: 1px solid var(--accent);
+    border: 1px solid var(--accent);
 }
 
 .ace-spectral-glow .ace_marker-layer .ace_active-line {
-  background: var(--gray20);
+    background: var(--gray20);
 }
 
 .ace-spectral-glow .ace_marker-layer .ace_selection {
-  background: var(--gray30);
+    background: var(--gray30);
 }
 
 .ace-spectral-glow .ace_marker-layer .ace_bracket {
-  border: 1px solid var(--accent);
-  border-radius: 0;
-  opacity: 0.7;
+    border: 1px solid var(--accent);
+    border-radius: 0;
+    opacity: 0.7;
 }
 
 .ace-spectral-glow .ace_keyword,
 .ace-spectral-glow .ace_meta,
 .ace-spectral-glow .ace_support.ace_class,
 .ace-spectral-glow .ace_support.ace_type {
-  color: var(--gray80);
+    color: var(--gray80);
 }
 
 .ace-spectral-glow .ace_constant.ace_language {
-  color: var(--gray70);
+    color: var(--gray70);
 }
 
 .ace-spectral-glow .ace_constant.ace_numeric {
-  color: var(--gray90);
+    color: var(--gray90);
 }
 
 .ace-spectral-glow .ace_entity.ace_name.ace_function,
@@ -81,30 +75,50 @@
 .ace-spectral-glow .ace_support.ace_function,
 .ace-spectral-glow .ace_variable,
 .ace-spectral-glow .ace_variable.ace_language {
-  color: var(--gray80);
+    color: var(--gray80);
 }
 
 .ace-spectral-glow .ace_string {
-  color: var(--gray70);
+    color: var(--gray70);
 }
 
 .ace-spectral-glow .ace_comment {
-  font-style: italic;
-  color: var(--gray70);
+    font-style: italic;
+    color: var(--gray70);
+}
+
+.ace-spectral-glow .ace_gutter-cell {
+    color: var(--gray70);
+}
+
+.ace-spectral-glow .ace_gutter-cell.ace_error {
+    background-image: none;
+}
+
+.ace-spectral-glow .ace_gutter-cell.ace_error::before {
+    display: block;
+    content: "";
+    position: absolute;
+    top: 3px;
+    left: 1px;
+    background-color: var(--error);
+    width: 13px;
+    height: 13px;
+    border-radius: 100%;
 }
 
 ::-webkit-scrollbar {
-  background-color: transparent;
+    background-color: transparent;
 }
 
 ::-webkit-scrollbar-track {
-  background-color: var(--gray20);
+    background-color: var(--gray20);
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: var(--gray30);
+    background-color: var(--gray30);
 }
 
 ::-webkit-scrollbar-corner {
-  display: none;
+    display: none;
 }
