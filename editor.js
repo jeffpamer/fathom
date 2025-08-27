@@ -31,6 +31,7 @@ function FathomEditor({ defaultFrag, updateFrag }) {
         updateFrag(editor.getValue.bind(editor));
       }, 500),
     );
+    editor.focus();
   }, []);
 
   return (
