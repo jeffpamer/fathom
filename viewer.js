@@ -1,14 +1,19 @@
 import React from "react";
 
+function reportShaderError() {}
+
 function loadShader(gl, type, source) {
   const shader = gl.createShader(type);
   gl.shaderSource(shader, source);
   gl.compileShader(shader);
 
   if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-    console.error(gl.getShaderInfoLog(shader));
+    const errors = gl.getShaderInfoLog(shader).split("\n");
+    reportShaderError(errors);
     gl.deleteShader(shader);
     return null;
+  } else {
+    reportShaderError([]);
   }
 
   return shader;
@@ -102,10 +107,13 @@ class FathomViewer extends React.PureComponent {
     this.canvas.removeEventListener("mousemove", this.onMouseMove);
   }
 
-  componentDidUpdate() {
+  componentDidUpdate({ frag: previousFrag }) {
     window.cancelAnimationFrame(this.animationFrameRequest);
     const { frag } = this.props;
-    this.program = initProgram(this.gl, this.vert, frag);
+
+    if (previousFrag !== frag) {
+      this.program = initProgram(this.gl, this.vert, frag);
+    }
 
     if (this.program) {
       this.gl.useProgram(this.program);
@@ -167,8 +175,9 @@ class FathomViewer extends React.PureComponent {
   }
 
   render() {
-    const { circular } = this.props;
+    const { circular, onShaderError } = this.props;
     const canvasStyle = { borderRadius: circular ? "100%" : 0 };
+    reportShaderError = onShaderError;
 
     return (
       <div className="fathom-viewer-container">

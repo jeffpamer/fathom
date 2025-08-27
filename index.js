@@ -27,6 +27,7 @@ void main() {
 function Fathom() {
   const [frag, setFrag] = useState(DEFAULT_FRAG);
   const [circular, setCircular] = useState(true);
+  const [shaderErrors, setShaderErrors] = useState([]);
 
   function onToggleCircular() {
     setCircular(!circular);
@@ -36,11 +37,37 @@ function Fathom() {
     setFrag(frag);
   }
 
+  function onShaderError(errors) {
+    const formattedErrors = errors.map((error) => {
+      const errorComponents = error.split(":");
+      const errorLine = errorComponents[2];
+      const errorSymbol = errorComponents[3];
+      const errorMessage = errorComponents[4];
+      if (!errorMessage) return {};
+      return {
+        row: errorLine - 1,
+        column: 0,
+        text: `${errorSymbol.trim()}: ${errorMessage.trim()}`,
+        type: "error",
+      };
+    });
+
+    setShaderErrors(formattedErrors);
+  }
+
   return (
     <div className="fathom-container">
       <div className="header" />
-      <FathomEditor defaultFrag={DEFAULT_FRAG} updateFrag={onUpdateFrag} />
-      <FathomViewer frag={frag} circular={circular} />
+      <FathomEditor
+        defaultFrag={DEFAULT_FRAG}
+        updateFrag={onUpdateFrag}
+        shaderErrors={shaderErrors}
+      />
+      <FathomViewer
+        frag={frag}
+        circular={circular}
+        onShaderError={onShaderError}
+      />
       <ControlPanel toggleCircular={onToggleCircular} />
     </div>
   );

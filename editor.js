@@ -5,14 +5,15 @@ import vim from "ace-builds/src-noconflict/keybinding-vim";
 import glsl from "ace-builds/src-noconflict/mode-glsl";
 
 import "./spectral-glow";
+let editor;
 
-function FathomEditor({ defaultFrag, updateFrag }) {
+function FathomEditor({ defaultFrag, updateFrag, shaderErrors }) {
   const editorRef = useRef(null);
 
   useEffect(() => {
     if (!editorRef.current) return;
 
-    const editor = ace.edit("editor");
+    editor = ace.edit("editor");
     editor.setKeyboardHandler(vim.handler);
     editor.setTheme("ace/theme/spectral_glow");
     editor.session.setOptions({
@@ -21,8 +22,8 @@ function FathomEditor({ defaultFrag, updateFrag }) {
       useSoftTabs: true,
     });
     editor.renderer.setOptions({
-      showGutter: false,
       fontSize: 14,
+      showFoldWidgets: false,
       fontFamily: "IBM Plex Mono",
     });
     editor.session.on(
@@ -33,6 +34,10 @@ function FathomEditor({ defaultFrag, updateFrag }) {
     );
     editor.focus();
   }, []);
+
+  useEffect(() => {
+    editor.session.setAnnotations(shaderErrors);
+  }, [shaderErrors]);
 
   return (
     <div className="fathom-editor-container">
