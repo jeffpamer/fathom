@@ -22,7 +22,7 @@
   "license": "ISC",
   "dependencies": {
     "@ibm/plex": "^6.4.1",
-    "ace-builds": "^1.4.11",
+    "ace-builds": "^1.43.2",
     "lodash.debounce": "^4.0.8",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
@@ -31,7 +31,7 @@
     "@parcel/packager-raw-url": "2.15.4",
     "@parcel/transformer-sass": "2.15.4",
     "@parcel/transformer-webmanifest": "2.15.4",
-    "@types/ace": "^0.0.43",
+    "@types/ace": "^0.0.52",
     "electron": "^37.3.1",
     "electron-builder": "^26.0.12",
     "electron-is-dev": "^3.0.1",
